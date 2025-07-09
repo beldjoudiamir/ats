@@ -29,8 +29,12 @@ const client = new MongoClient(uri, {
   retryWrites: true,
   w: "majority",
   maxPoolSize: 10,
-  serverSelectionTimeoutMS: 5000,
+  serverSelectionTimeoutMS: 30000,
   socketTimeoutMS: 45000,
+  connectTimeoutMS: 30000,
+  tls: true,
+  tlsAllowInvalidCertificates: false,
+  tlsAllowInvalidHostnames: false,
 });
 
 async function connectToDatabase() {
