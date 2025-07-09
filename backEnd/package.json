@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node src/server.production.js",
+    "start:test": "node src/server.test.js",
     "dev": "nodemon src/server.js",
     "create-admins": "node src/insertAdmins.js",
     "create-admin": "node src/insertTestUser.js",

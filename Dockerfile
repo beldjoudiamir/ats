@@ -13,5 +13,5 @@ RUN yarn install
 # Exposer le port
 EXPOSE 3000
 
-# Commande de démarrage directe
-CMD ["yarn", "start"] 
+# Commande de démarrage directe (test)
+CMD ["node", "src/server.test.js"] 
