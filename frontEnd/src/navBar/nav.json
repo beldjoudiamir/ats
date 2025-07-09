@@ -1,0 +1,27 @@
+[
+    {"label": "logo", 
+    "href": "/"},
+    {
+        "label": "Phone",
+        "href": "/"
+      },
+
+    {
+      "label": "Accueil",
+      "href": "/"
+    },
+    {
+      "label": "Devis",
+      "href": "/devis"
+    },
+    {
+      "label": "Contact",
+      "href": "/contact"
+    },
+    {
+      "label": "Connexion",
+      "href": "/connexion"
+    }
+    
+    ]
+
