@@ -2,7 +2,7 @@
 builder = "DOCKERFILE"
 
 [deploy]
-startCommand = "node src/server.mongodb-ssl-fix.js"
+startCommand = "node src/server.production.js"
 healthcheckPath = "/api/config"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"

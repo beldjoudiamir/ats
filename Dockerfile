@@ -19,5 +19,5 @@ COPY backEnd/ ./
 # Exposer le port
 EXPOSE 3000
 
-# Commande de démarrage (test MongoDB SSL Fix)
-CMD ["node", "src/server.mongodb-ssl-fix.js"] 
+# Commande de démarrage (serveur de production)
+CMD ["node", "src/server.production.js"] 
