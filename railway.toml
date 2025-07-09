@@ -2,7 +2,7 @@
 builder = "DOCKERFILE"
 
 [deploy]
-startCommand = "node src/server.production.js"
+startCommand = "node src/server.production-simple.js"
 healthcheckPath = "/api/config"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"

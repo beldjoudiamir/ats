@@ -19,5 +19,5 @@ COPY backEnd/ ./
 # Exposer le port
 EXPOSE 3000
 
-# Commande de démarrage (serveur de production)
-CMD ["node", "src/server.production.js"] 
+# Commande de démarrage (serveur de production simplifié)
+CMD ["node", "src/server.production-simple.js"] 
