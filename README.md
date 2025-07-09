@@ -163,3 +163,120 @@ Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 ---
 
 **Note**: Ce projet est en développement actif. Les fonctionnalités peuvent évoluer.
+
+## 🔑 **Étape 1 : Se connecter en tant qu'admin existant**
+
+Si vous n'avez pas encore d'admin, créons d'abord un admin de base :
+
+**POST** `http://localhost:5000/api/users/register`
+
+**Body (JSON) :**
+```json
+{
+  "name": "Admin Initial",
+  "email": "admin@ats.com",
+  "password": "admin123"
+}
+```
+
+## 🔑 **Étape 2 : Se connecter pour obtenir le token**
+
+**POST** `http://localhost:5000/api/users/login`
+
+**Body (JSON) :**
+```json
+{
+  "email": "admin@ats.com",
+  "password": "admin123"
+}
+```
+
+**Réponse attendue :**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "...",
+    "name": "Admin Initial",
+    "email": "admin@ats.com",
+    "role": "user"
+  }
+}
+```
+
+## 🔑 **Étape 3 : Ajouter LE PADRE avec le token**
+
+**POST** `http://localhost:5000/api/users/add`
+
+**Headers :**
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+```
+
+**Body (JSON) :**
+```json
+{
+  "name": "LE PADRE",
+  "mail": "le@padre.io",
+  "password": "Xman2025!",
+  "role": "admin"
+}
+```
+
+## 📝 **Configuration Postman étape par étape :**
+
+### 1. **Créer la requête de connexion :**
+- Méthode : `POST`
+- URL : `http://localhost:5000/api/users/login`
+- Headers : `Content-Type: application/json`
+- Body (raw JSON) :
+```json
+{
+  "email": "admin@ats.com",
+  "password": "admin123"
+}
+```
+
+### 2. **Créer la requête d'ajout d'admin :**
+- Méthode : `POST`
+- URL : `http://localhost:5000/api/users/add`
+- Headers :
+  - `Content-Type: application/json`
+  - `Authorization: Bearer {{token}}`
+- Body (raw JSON) :
+```json
+{
+  "name": "LE PADRE",
+  "mail": "le@padre.io",
+  "password": "Xman2025!",
+  "role": "admin"
+}
+```
+
+### 3. **Configurer une variable Postman :**
+- Dans la requête de login, allez dans l'onglet "Tests"
+- Ajoutez ce script pour sauvegarder automatiquement le token :
+```javascript
+if (pm.response.code === 200) {
+    const response = pm.response.json();
+    pm.environment.set("token", response.token);
+}
+```
+
+## 🚀 **Alternative : Utiliser l'inscription directe**
+
+Si vous voulez éviter l'étape de connexion, vous pouvez aussi utiliser l'endpoint d'inscription publique, mais le rôle sera forcé à "user" :
+
+**POST** `http://localhost:5000/api/users/register`
+
+**Body (JSON) :**
+```json
+{
+  "name": "LE PADRE",
+  "email": "le@padre.io",
+  "password": "Xman2025!"
+}
+```
+
+**Quelle méthode préférez-vous utiliser ?**
