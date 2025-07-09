@@ -5,10 +5,10 @@
   "main": "backEnd/src/server.production.js",
   "license": "MIT",
   "scripts": {
-    "start": "cd backEnd && npm start",
-    "dev": "cd backEnd && npm run dev",
-    "build": "cd backEnd && npm install",
-    "create-admins": "cd backEnd && npm run create-admins",
+    "start": "npm start",
+    "dev": "npm run dev",
+    "build": "npm install",
+    "create-admins": "npm run create-admins",
     "frontend:build": "cd frontEnd && yarn build",
     "frontend:start": "cd frontEnd && yarn start"
   },
