@@ -19,7 +19,7 @@ const COLLECTION = {
   users: "users",
 };
 
-// Configuration MongoDB Atlas pour la production
+// Configuration MongoDB Atlas pour la production (simplifiée)
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -28,13 +28,10 @@ const client = new MongoClient(uri, {
   },
   retryWrites: true,
   w: "majority",
-  maxPoolSize: 10,
-  serverSelectionTimeoutMS: 30000,
-  socketTimeoutMS: 45000,
-  connectTimeoutMS: 30000,
-  tls: true,
-  tlsAllowInvalidCertificates: false,
-  tlsAllowInvalidHostnames: false,
+  maxPoolSize: 5,
+  serverSelectionTimeoutMS: 60000,
+  socketTimeoutMS: 60000,
+  connectTimeoutMS: 60000,
 });
 
 async function connectToDatabase() {

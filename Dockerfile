@@ -19,5 +19,5 @@ COPY backEnd/ ./
 # Exposer le port
 EXPOSE 3000
 
-# Commande de démarrage (serveur simple sans MongoDB)
-CMD ["node", "src/server.simple.js"] 
+# Commande de démarrage (test MongoDB Atlas)
+CMD ["node", "src/server.mongodb-test.js"] 
