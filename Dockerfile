@@ -19,5 +19,5 @@ COPY backEnd/ ./
 # Exposer le port
 EXPOSE 3000
 
-# Commande de démarrage (test MongoDB Atlas)
+# Commande de démarrage (test MongoDB Atlas - forcé)
 CMD ["node", "src/server.mongodb-test.js"] 

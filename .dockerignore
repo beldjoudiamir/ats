@@ -86,4 +86,7 @@ uploads/
 # Certificates
 *.pem
 *.key
-*.crt 
+*.crt
+
+# Cache Railway
+.railway/ 
