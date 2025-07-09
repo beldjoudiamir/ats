@@ -1,0 +1,37 @@
+{
+  "name": "ats-application",
+  "version": "1.0.0",
+  "description": "ATS - Application de Transport et Services",
+  "main": "backEnd/src/server.production.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "cd backEnd && yarn start",
+    "dev": "cd backEnd && yarn dev",
+    "build": "cd backEnd && yarn install",
+    "create-admins": "cd backEnd && yarn create-admins",
+    "frontend:build": "cd frontEnd && yarn build",
+    "frontend:start": "cd frontEnd && yarn start"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "yarn": ">=1.22.0"
+  },
+  "workspaces": [
+    "backEnd",
+    "frontEnd"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/beldjoudiamir/ats.git"
+  },
+  "keywords": [
+    "transport",
+    "logistics",
+    "management",
+    "react",
+    "nodejs",
+    "mongodb"
+  ],
+  "author": "ATS Team",
+  "private": true
+} 

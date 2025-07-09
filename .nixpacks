@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["nodejs_18", "yarn"]
+
+[phases.install]
+cmds = ["cd backEnd && yarn install"]
+
+[phases.build]
+cmds = ["echo 'Build completed'"]
+
+[start]
+cmd = "cd backEnd && yarn start" 
