@@ -3,12 +3,12 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 // URL de base de l'API
 export const API_BASE_URL = isProduction 
-  ? 'https://votre-app-railway.railway.app' // URL Railway confirmée
+  ? 'https://web-production-2554.up.railway.app' // URL Railway confirmée
   : 'http://localhost:5000';
 
 // Configuration pour les uploads
 export const UPLOAD_BASE_URL = isProduction
-  ? 'https://votre-app-railway.railway.app' // URL Railway confirmée
+  ? 'https://web-production-2554.up.railway.app' // URL Railway confirmée
   : 'http://localhost:5000';
 
 // Configuration pour les images
