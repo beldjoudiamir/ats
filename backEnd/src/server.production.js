@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require("express");
 const path = require("path");
 
-const connectToDatabase = require("./config/bd.js");
+const connectToDatabase = require("./config/bd.production.js");
 const applyMiddlewares = require("./utils/middleware.js");
 const createRoutes = require("./routes/myRoutes.js");
 const clientRoutes = require("./routes/clientRoutes.js");

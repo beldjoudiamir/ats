@@ -1,4 +1,4 @@
-// Fichier config/bd.js
+// Fichier config/bd.production.js - Configuration MongoDB pour la production
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const dotenv = require("dotenv");
 
@@ -19,6 +19,7 @@ const COLLECTION = {
   users: "users",
 };
 
+// Configuration MongoDB Atlas pour la production
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -29,14 +30,19 @@ const client = new MongoClient(uri, {
   sslValidate: false,
   retryWrites: true,
   w: "majority",
+  maxPoolSize: 10,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
 });
 
 async function connectToDatabase() {
   try {
+    console.log("🔄 Tentative de connexion à MongoDB Atlas...");
     await client.connect();
-    console.log("Connected to MongoDB!");
+    console.log("✅ Connecté à MongoDB Atlas avec succès!");
 
     const db = client.db(DATABASE);
+    console.log(`📊 Base de données: ${DATABASE}`);
 
     return {
       collection: db.collection(COLLECTION.collection),
@@ -51,9 +57,10 @@ async function connectToDatabase() {
       users: db.collection(COLLECTION.users),
     };
   } catch (err) {
-    console.error("Error connecting to MongoDB:", err.message);
+    console.error("❌ Erreur de connexion à MongoDB:", err.message);
+    console.error("🔍 Détails de l'erreur:", err);
     throw err;
   }
 }
 
-module.exports = connectToDatabase;
+module.exports = connectToDatabase; 
