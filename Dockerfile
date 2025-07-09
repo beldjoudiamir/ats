@@ -1,17 +1,23 @@
-# Dockerfile simplifié pour ATS Backend
+# Dockerfile optimisé pour ATS Backend
 FROM node:18-alpine
 
-# Définir le répertoire de travail directement dans le backend
+# Installer les dépendances système nécessaires
+RUN apk add --no-cache python3 make g++
+
+# Définir le répertoire de travail
 WORKDIR /app/backEnd
 
-# Copier le backend
-COPY backEnd/ ./
+# Copier package.json et yarn.lock d'abord pour optimiser le cache
+COPY backEnd/package*.json backEnd/yarn.lock ./
 
-# Installer les dépendances avec Yarn (déjà inclus dans node:18-alpine)
-RUN yarn install
+# Installer les dépendances
+RUN yarn install --frozen-lockfile --production=false
+
+# Copier le reste du code
+COPY backEnd/ ./
 
 # Exposer le port
 EXPOSE 3000
 
-# Commande de démarrage directe (test)
+# Commande de démarrage
 CMD ["node", "src/server.test.js"] 
