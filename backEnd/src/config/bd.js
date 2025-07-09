@@ -25,8 +25,6 @@ const client = new MongoClient(uri, {
     strict: true,
     deprecationErrors: true,
   },
-  ssl: true,
-  sslValidate: false,
   retryWrites: true,
   w: "majority",
 });
