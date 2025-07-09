@@ -117,3 +117,70 @@ Le serveur de test va nous dire exactement :
 **Continuez à surveiller les logs Railway et dites-moi ce que vous voyez dans les prochaines secondes !** 
 
 Le logo Railway indique que tout va bien, maintenant nous attendons juste le démarrage de l'application ! 🚀 
+
+## 🔍 **Test du serveur simple**
+
+Testez ces endpoints dans l'ordre :
+
+### **1. Test de base**
+```
+GET https://votre-app-railway.railway.app/
+```
+**Résultat attendu :**
+```json
+{
+  "message": "🚀 ATS Backend is running successfully!",
+  "status": "healthy",
+  "timestamp": "2025-07-09T...",
+  "port": 3000,
+  "environment": "production",
+  "mongodb_uri": "Configured/Missing",
+  "jwt_secret": "Configured/Missing",
+  "email_user": "Configured/Missing"
+}
+```
+
+### **2. Test de santé**
+```
+GET https://votre-app-railway.railway.app/api/health
+```
+**Résultat attendu :**
+```json
+{
+  "status": "OK",
+  "message": "API is healthy and ready for MongoDB configuration",
+  "timestamp": "2025-07-09T...",
+  "variables": {
+    "mongodb_uri": "Present/Missing",
+    "jwt_secret": "Present/Missing",
+    "email_user": "Present/Missing"
+  }
+}
+```
+
+### **3. Test de configuration**
+```
+GET https://votre-app-railway.railway.app/api/config
+```
+**Résultat attendu :**
+```json
+{
+  "message": "Configuration check",
+  "variables": {
+    "mongodb_uri": "✅ Configured/❌ Missing",
+    "jwt_secret": "✅ Configured/❌ Missing",
+    "email_user": "✅ Configured/❌ Missing",
+    "port": 3000
+  }
+}
+```
+
+## 📋 **Que me dire après les tests :**
+
+1. **Est-ce que les endpoints répondent ?**
+2. **Quelles variables sont configurées/missing ?**
+3. **Y a-t-il des erreurs ?**
+
+**Testez ces 3 endpoints et dites-moi ce que vous obtenez !** 
+
+Cela nous dira exactement quelles variables d'environnement sont configurées sur Railway et nous pourrons ensuite configurer MongoDB Atlas correctement ! 🚀 
