@@ -21,5 +21,5 @@ WORKDIR /app
 # Exposer le port
 EXPOSE 3000
 
-# Commande de démarrage avec npm
-CMD ["npm", "run", "start"] 
+# Commande de démarrage directe du serveur backend
+CMD ["node", "backEnd/src/server.production.js"] 
