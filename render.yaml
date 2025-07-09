@@ -3,8 +3,8 @@ services:
     name: ats-backend
     env: node
     plan: free
-    buildCommand: cd backEnd && yarn install
-    startCommand: cd backEnd && yarn start
+    buildCommand: cd backEnd && npm install
+    startCommand: cd backEnd && npm start
     healthCheckPath: /
     envVars:
       - key: NODE_ENV

@@ -1,1 +1,1 @@
-web: cd backEnd && yarn start 
+web: cd backEnd && npm start 

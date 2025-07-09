@@ -5,16 +5,16 @@
   "main": "backEnd/src/server.production.js",
   "license": "MIT",
   "scripts": {
-    "start": "cd backEnd && yarn start",
-    "dev": "cd backEnd && yarn dev",
-    "build": "cd backEnd && yarn install",
-    "create-admins": "cd backEnd && yarn create-admins",
+    "start": "cd backEnd && npm start",
+    "dev": "cd backEnd && npm run dev",
+    "build": "cd backEnd && npm install",
+    "create-admins": "cd backEnd && npm run create-admins",
     "frontend:build": "cd frontEnd && yarn build",
     "frontend:start": "cd frontEnd && yarn start"
   },
   "engines": {
     "node": ">=18.0.0",
-    "yarn": ">=1.22.0"
+    "npm": ">=8.0.0"
   },
   "workspaces": [
     "backEnd",
