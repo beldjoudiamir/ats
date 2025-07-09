@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 8080;
 
 // Configuration CORS
 app.use(cors({
-  origin: ['https://railway.com', 'https://web-production-2554.up.railway.app', 'http://localhost:3000'],
+  origin: ['https://railway.com', 'https://web-production-2554.up.railway.app', 'https://ats-front-end-xi.vercel.app', 'http://localhost:3000'],
   credentials: true
 }));
 
@@ -152,6 +152,19 @@ app.get('/api/test', (req, res) => {
     message: 'ATS Server SSL Fix - OK',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development'
+  });
+});
+
+// Endpoint temporaire pour myCompanyInfo
+app.get('/api/myCompanyInfo', (req, res) => {
+  res.json({
+    message: 'Endpoint temporaire - Serveur de test actif',
+    data: {
+      name: 'ATS Solutions',
+      phone: '+33 1 23 45 67 89',
+      email: 'contact@ats-solutions.com',
+      address: '123 Rue de la Paix, 75001 Paris'
+    }
   });
 });
 
