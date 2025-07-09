@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { EyeIcon, EyeSlashIcon, LockClosedIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
+import { API_BASE_URL } from "../config/config.js";
 
 export default function Connexion() {
   const [email, setEmail] = useState("");
@@ -16,7 +17,7 @@ export default function Connexion() {
   useEffect(() => {
     const fetchCompanyInfo = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/myCompanyInfo");
+        const response = await axios.get(`${API_BASE_URL}/api/myCompanyInfo`);
         if (response.data && response.data.length > 0) {
           setCompanyInfo(response.data[0]);
         }
@@ -43,7 +44,7 @@ export default function Connexion() {
     setLoading(true);
     
     try {
-      const response = await fetch("http://localhost:5000/api/users/login", {
+      const response = await fetch(`${API_BASE_URL}/api/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, rememberMe }),
