@@ -19,27 +19,21 @@ const COLLECTION = {
   users: "users",
 };
 
-// Configuration MongoDB sans SSL/TLS
+// Configuration MongoDB simplifiée
 function createMongoClient() {
   const uri = process.env.MONGODB_URI;
   
-  // Configuration ultra-simple sans SSL
+  // Configuration ultra-simple sans options dépréciées
   const options = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    maxPoolSize: 1,
+    maxPoolSize: 10,
     serverSelectionTimeoutMS: 30000,
     socketTimeoutMS: 45000,
     // Désactiver complètement SSL/TLS
     ssl: false,
     tls: false,
-    tlsAllowInvalidCertificates: false,
-    tlsAllowInvalidHostnames: false,
     // Options de connexion basiques
     retryWrites: false,
     w: 1,
-    bufferMaxEntries: 0,
-    bufferCommands: false,
   };
   
   return new MongoClient(uri, options);
@@ -86,8 +80,6 @@ async function connectToDatabase() {
     try {
       console.log("🔄 Trying alternative MongoDB connection...");
       const alternativeClient = new MongoClient(process.env.MONGODB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
         maxPoolSize: 1,
         serverSelectionTimeoutMS: 10000,
         socketTimeoutMS: 30000,
