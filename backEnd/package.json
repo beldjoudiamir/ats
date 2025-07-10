@@ -4,14 +4,8 @@
   "main": "./src/server.js",
   "license": "MIT",
   "scripts": {
-    "start": "node src/server.production-simple.js",
-    "start:production": "node src/server.production.js",
-    "start:simple": "node src/server.simple.js",
-    "start:test": "node src/server.test.js",
-    "dev": "nodemon src/server.js",
-    "create-admins": "node src/insertAdmins.js",
-    "create-admin": "node src/insertTestUser.js",
-    "build": "echo 'Backend build completed'"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -27,9 +21,5 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
-  },
-  "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=8.0.0"
   }
 }

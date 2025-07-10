@@ -25,8 +25,6 @@ const client = new MongoClient(uri, {
     strict: true,
     deprecationErrors: true,
   },
-  retryWrites: true,
-  w: "majority",
 });
 
 async function connectToDatabase() {
