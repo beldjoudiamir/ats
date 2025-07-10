@@ -16,13 +16,13 @@
 - Sélectionner le repository `ats`
 
 ### 3. Configuration Automatique
-Railway détecte automatiquement :
-- ✅ Application Node.js
-- ✅ Structure du projet
-- ✅ Dépendances
+Railway va maintenant détecter :
+- ✅ Configuration Nixpacks (`nixpacks.toml`)
+- ✅ Configuration Railway (`railway.json`)
+- ✅ Procfile pour le démarrage
 
 ### 4. Variables d'Environnement
-Ajouter dans Railway :
+Dans Railway, aller dans "Variables" et ajouter :
 
 | Variable | Valeur |
 |----------|--------|
@@ -31,9 +31,11 @@ Ajouter dans Railway :
 | `PORT` | `3000` |
 
 ### 5. Déploiement
-- Railway déploie automatiquement
-- URL générée automatiquement
-- Logs en temps réel
+- Railway va automatiquement :
+  - Installer les dépendances backend et frontend
+  - Builder le frontend React
+  - Démarrer le serveur backend
+  - Générer une URL publique
 
 ## 🎉 C'est tout !
 
@@ -46,5 +48,10 @@ Railway gère tout automatiquement :
 
 ## 🧪 Test
 Après déploiement, testez :
-- URL principale : votre application
-- API : `/api/test` 
+- URL principale : votre application complète
+- API : `/api/test`
+
+## 🔧 Fichiers de Configuration
+- `nixpacks.toml` : Configuration de build
+- `railway.json` : Configuration Railway
+- `Procfile` : Commande de démarrage 
