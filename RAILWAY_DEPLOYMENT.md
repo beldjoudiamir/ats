@@ -17,9 +17,9 @@
 
 ### 3. Configuration Automatique
 Railway va maintenant détecter :
-- ✅ Configuration Nixpacks (`nixpacks.toml`)
+- ✅ Dockerfile pour le build
 - ✅ Configuration Railway (`railway.json`)
-- ✅ Procfile pour le démarrage
+- ✅ Structure backend + frontend
 
 ### 4. Variables d'Environnement
 Dans Railway, aller dans "Variables" et ajouter :
@@ -32,6 +32,7 @@ Dans Railway, aller dans "Variables" et ajouter :
 
 ### 5. Déploiement
 - Railway va automatiquement :
+  - Utiliser le Dockerfile pour le build
   - Installer les dépendances backend et frontend
   - Builder le frontend React
   - Démarrer le serveur backend
@@ -52,6 +53,6 @@ Après déploiement, testez :
 - API : `/api/test`
 
 ## 🔧 Fichiers de Configuration
-- `nixpacks.toml` : Configuration de build
+- `Dockerfile` : Configuration de build Docker
 - `railway.json` : Configuration Railway
-- `Procfile` : Commande de démarrage 
+- `.dockerignore` : Fichiers ignorés par Docker 
