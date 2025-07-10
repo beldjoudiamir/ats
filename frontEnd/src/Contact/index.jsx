@@ -3,6 +3,7 @@ import { EnvelopeIcon, PhoneIcon, MapPinIcon, UserIcon, ChatBubbleLeftRightIcon 
 import { getCompanyInfo } from '../Dashboard/api/apiService';
 import Button from '../Dashboard/UI/Button';
 import axios from 'axios';
+import API_BASE_URL from "../config/api.js";
 
 export default function Contact() {
   const [form, setForm] = useState({
@@ -37,7 +38,7 @@ export default function Contact() {
     
     try {
       // Envoyer le message au backend
-      const response = await axios.post('http://localhost:5000/api/receivedMessage/add', {
+      const response = await axios.post(`${API_BASE_URL}/api/receivedMessage/add`, {
         name: form.name,
         email: form.email,
         phone: form.phone,

@@ -3,6 +3,7 @@ import { TruckIcon, ShieldCheckIcon, ClockIcon, GlobeAltIcon, MapPinIcon, PhoneI
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Loader from "../components/Loader";
+import API_BASE_URL from "../config/api.js";
 
 const sliderImages = [
   "/slider/pexels-yu-han-huang-1778395-32672761.jpg",
@@ -20,7 +21,7 @@ export default function Home() {
   useEffect(() => {
     const fetchCompanyInfo = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/myCompanyInfo");
+        const response = await axios.get(`${API_BASE_URL}/api/myCompanyInfo`);
         if (response.data && response.data.length > 0) {
           setCompanyInfo(response.data[0]);
         }
