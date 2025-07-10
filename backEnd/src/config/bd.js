@@ -1,5 +1,6 @@
 // Fichier config/bd.js
 const { createMongoClient } = require("./mongodb-atlas");
+const { getPublicIP } = require("./get-ip");
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -20,6 +21,21 @@ const COLLECTION = {
 
 async function connectToDatabase() {
   let client;
+  
+  // Afficher les informations de connexion pour MongoDB Atlas
+  console.log("🌐 Railway Environment Info:");
+  console.log("   - RAILWAY_STATIC_URL:", process.env.RAILWAY_STATIC_URL || "Not set");
+  console.log("   - RAILWAY_PUBLIC_DOMAIN:", process.env.RAILWAY_PUBLIC_DOMAIN || "Not set");
+  console.log("   - PORT:", process.env.PORT || "3000");
+  
+  // Récupérer l'IP publique pour MongoDB Atlas
+  try {
+    const publicIP = await getPublicIP();
+    console.log("🌍 Public IP Address:", publicIP);
+    console.log("📝 Add this IP to MongoDB Atlas Network Access:", publicIP + "/32");
+  } catch (error) {
+    console.log("⚠️ Could not get public IP:", error.message);
+  }
   
   try {
     console.log("🔌 Attempting to connect to MongoDB Atlas...");
