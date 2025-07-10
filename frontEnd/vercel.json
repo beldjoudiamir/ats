@@ -28,6 +28,12 @@
     }
   ],
   "env": {
-    "VITE_API_URL": "https://ats-app-production.up.railway.app"
+    "VITE_API_URL": "https://ats-app-production.up.railway.app",
+    "NODE_ENV": "production"
+  },
+  "functions": {
+    "app/api/**/*.js": {
+      "runtime": "nodejs18.x"
+    }
   }
 } 
