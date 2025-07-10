@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import API_BASE_URL from '../config/api.js';
 import EnvironmentDebug from './EnvironmentDebug';
+import UrlTest from './UrlTest';
 
 const ApiTest = () => {
   const [testResults, setTestResults] = useState([]);
@@ -116,6 +117,9 @@ const ApiTest = () => {
   return (
     <div className="p-6 bg-white rounded-lg shadow-md max-w-4xl mx-auto">
       <h2 className="text-2xl font-bold mb-4">🔧 Test de Connexion API</h2>
+      
+      {/* Test URL simple */}
+      <UrlTest />
       
       {/* Debug Environnement */}
       <EnvironmentDebug />
