@@ -26,15 +26,21 @@ async function connectToDatabase() {
   console.log("🌐 Railway Environment Info:");
   console.log("   - RAILWAY_STATIC_URL:", process.env.RAILWAY_STATIC_URL || "Not set");
   console.log("   - RAILWAY_PUBLIC_DOMAIN:", process.env.RAILWAY_PUBLIC_DOMAIN || "Not set");
+  console.log("   - RAILWAY_REPLICA_ID:", process.env.RAILWAY_REPLICA_ID || "Not set");
+  console.log("   - RAILWAY_PROJECT_ID:", process.env.RAILWAY_PROJECT_ID || "Not set");
   console.log("   - PORT:", process.env.PORT || "3000");
+  console.log("   - NODE_ENV:", process.env.NODE_ENV || "development");
   
   // Récupérer l'IP publique pour MongoDB Atlas
+  console.log("🔍 Trying to get public IP address...");
   try {
     const publicIP = await getPublicIP();
-    console.log("🌍 Public IP Address:", publicIP);
-    console.log("📝 Add this IP to MongoDB Atlas Network Access:", publicIP + "/32");
+    console.log("✅ SUCCESS - Public IP Address:", publicIP);
+    console.log("📝 ADD THIS TO MONGODB ATLAS NETWORK ACCESS:", publicIP + "/32");
+    console.log("🔗 Go to MongoDB Atlas → Network Access → ADD IP ADDRESS →", publicIP + "/32");
   } catch (error) {
-    console.log("⚠️ Could not get public IP:", error.message);
+    console.log("❌ Could not get public IP:", error.message);
+    console.log("💡 Alternative: Use 'Allow Access from Anywhere' (0.0.0.0/0) temporarily");
   }
   
   try {

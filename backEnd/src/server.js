@@ -8,6 +8,7 @@ const connectToDatabase = require("./config/bd.js");
 const applyMiddlewares = require("./utils/middleware.js");
 const createRoutes = require("./routes/myRoutes.js");
 const clientRoutes = require("./routes/clientRoutes.js");
+const ipRoute = require("./routes/ipRoute.js");
 
 const PORT = process.env.PORT || 5000;
 const HTTPS_PORT = process.env.HTTPS_PORT || 5443;
@@ -46,6 +47,7 @@ async function startServer() {
 
     app.use("/api", routes);
     app.use("/api/clients", clientRoutes(collection2));
+    app.use("/api", ipRoute); // Route pour afficher l'IP
 
     app.get("/", (req, res) => {
       res.json(`ATS project backend server is up and running! Port: ${PORT}`);
