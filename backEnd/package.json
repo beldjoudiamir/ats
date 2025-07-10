@@ -1,11 +1,13 @@
 {
   "name": "backEnd",
   "version": "1.0.0",
-  "main": "./src/server.js",
+  "main": "./vercel.js",
   "license": "MIT",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "start": "node vercel.js",
+    "dev": "nodemon src/server.js",
+    "build": "npm install",
+    "vercel-build": "npm install"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
