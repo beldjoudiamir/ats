@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import API_BASE_URL from "../../config/api.js";
 import Loader from "../../components/Loader";
 
 // URL de l'API utilisateurs
-const API_URL = "http://localhost:5000/api/users";
+const API_URL = `${API_BASE_URL}/api/users`;
 
 // Fonction utilitaire pour récupérer le header d'authentification JWT
 const getAuthHeaders = () => {

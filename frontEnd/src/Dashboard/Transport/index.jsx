@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import API_BASE_URL from "../../config/api.js";
 import Dashboard from "../mainDashboard.jsx";
 import SearchForm from "./searchFormOrdre.jsx";
 import AddTransportOrder from "./AddTransportOrder";
@@ -22,7 +23,7 @@ export default function Transport() {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:5000/api/transportOrder");
+      const res = await axios.get(`${API_BASE_URL}/api/transportOrder`);
       setOrders(res.data);
     } catch (err) {
       setOrders([]);
@@ -39,7 +40,7 @@ export default function Transport() {
   const confirmDelete = async () => {
     if (!orderToDelete) return;
     try {
-      await axios.delete(`http://localhost:5000/api/transportOrder/delete/${orderToDelete}`);
+      await axios.delete(`${API_BASE_URL}/api/transportOrder/delete/${orderToDelete}`);
       fetchOrders();
     } catch (err) {
       alert("Erreur lors de la suppression.");
@@ -53,7 +54,7 @@ export default function Transport() {
     fetchOrders();
     // Récupération des infos de notre entreprise
     setCompanyLoading(true);
-    axios.get("http://localhost:5000/api/myCompanyInfo")
+    axios.get(`${API_BASE_URL}/api/myCompanyInfo`)
       .then(res => {
         let data = res.data;
         if (!Array.isArray(data)) {

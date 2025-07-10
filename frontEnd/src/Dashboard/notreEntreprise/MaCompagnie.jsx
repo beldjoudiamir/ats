@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import API_BASE_URL from "../../config/api.js";
 import { getCompanyInfo, updateCompanyLogo, updateCompanyInfo } from "../api/apiService";
 import Loader from "../../components/Loader";
 
@@ -70,7 +71,7 @@ function MaCompagnie() {
       const formData = new FormData();
       formData.append("logo", file);
       try {
-        const res = await axios.post("http://localhost:5000/api/upload/logo", formData, {
+        const res = await axios.post(`${API_BASE_URL}/api/upload/logo`, formData, {
           headers: { "Content-Type": "multipart/form-data" }
         });
         const logoPath = res.data.path;
@@ -94,13 +95,13 @@ function MaCompagnie() {
       const formData = new FormData();
       formData.append("stamp", file);
       try {
-        const res = await axios.post("http://localhost:5000/api/upload/stamp", formData, {
+        const res = await axios.post(`${API_BASE_URL}/api/upload/stamp`, formData, {
           headers: { "Content-Type": "multipart/form-data" }
         });
         const stampPath = res.data.path;
         setForm((prev) => ({ ...prev, stamp: stampPath }));
         if (company && company._id) {
-          await axios.patch(`http://localhost:5000/api/myCompanyInfo/stamp/${company._id}`, { stamp: stampPath });
+          await axios.patch(`${API_BASE_URL}/api/myCompanyInfo/stamp/${company._id}`, { stamp: stampPath });
           setCompany((prev) => ({ ...prev, stamp: stampPath }));
         }
       } catch (err) {
@@ -148,9 +149,9 @@ function MaCompagnie() {
 
   const handleFetchLogo = async (url) => {
     try {
-      const res = await axios.post("http://localhost:5000/api/upload/fetch-logo", { url });
+      const res = await axios.post(`${API_BASE_URL}/api/upload/fetch-logo`, { url });
       setForm((prev) => ({ ...prev, logo: res.data.url }));
-      setLogoPreview(`http://localhost:5000${res.data.url}`);
+      setLogoPreview(`${API_BASE_URL}${res.data.url}`);
       setSuccess("Logo récupéré et stocké localement !");
       if (company && company._id) {
         await updateCompanyLogo(company._id, res.data.url);
@@ -188,7 +189,7 @@ function MaCompagnie() {
     if (company && company._id) {
       try {
         console.log('handleDeleteStamp - Appel PATCH avec ID:', company._id);
-        const result = await axios.patch(`http://localhost:5000/api/myCompanyInfo/stamp/${company._id}`, { stamp: "" });
+        const result = await axios.patch(`${API_BASE_URL}/api/myCompanyInfo/stamp/${company._id}`, { stamp: "" });
         console.log('handleDeleteStamp - Résultat:', result);
         setCompany((prev) => ({ ...prev, stamp: "" }));
       } catch (err) {
@@ -223,7 +224,7 @@ function MaCompagnie() {
       } else {
         console.log('🔧 handleSubmit - Mode CRÉATION');
         // Mode création - utiliser la route POST
-        const response = await axios.post("http://localhost:5000/api/myCompanyInfo/add", form);
+        const response = await axios.post(`${API_BASE_URL}/api/myCompanyInfo/add`, form);
         setSuccess("Informations enregistrées avec succès !");
         setCompany(response.data);
         setHasExistingData(true);
@@ -268,7 +269,7 @@ function MaCompagnie() {
         <div className="flex flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-blue-100 p-10 md:w-1/3 border-r border-gray-200">
           <div className="w-56 h-56 overflow-hidden shadow-2xl mb-6 bg-white flex items-center justify-center transition-transform duration-300 hover:scale-105 hover:shadow-blue-300">
             <img
-              src={form.logo ? (form.logo.startsWith('http') ? form.logo : `http://localhost:5000${form.logo}`) : "/3342137.png"}
+              src={form.logo ? (form.logo.startsWith('http') ? form.logo : `${API_BASE_URL}${form.logo}`) : "/3342137.png"}
               alt="Logo"
               className="object-contain w-full h-full drop-shadow-xl"
               style={{ filter: 'drop-shadow(0 4px 16px rgba(0,0,0,0.12))' }}
@@ -278,7 +279,7 @@ function MaCompagnie() {
             <>
               <button
                 type="button"
-                onClick={() => handleDownloadLogo(form.logo.startsWith('http') ? form.logo : `http://localhost:5000${form.logo}`)}
+                onClick={() => handleDownloadLogo(form.logo.startsWith('http') ? form.logo : `${API_BASE_URL}${form.logo}`)}
                 className="px-6 py-2 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 text-sm font-semibold mb-2 transition-colors duration-200"
               >
                 Télécharger le logo
@@ -304,7 +305,7 @@ function MaCompagnie() {
           {/* Bloc tampon stylé comme le logo */}
           <div className="w-56 h-56 overflow-hidden shadow-2xl mb-6 bg-white flex items-center justify-center transition-transform duration-300 hover:scale-105 hover:shadow-green-300 mt-6">
             <img
-              src={form.stamp ? (form.stamp.startsWith('http') ? form.stamp : `http://localhost:5000${form.stamp}`) : "/3342137.png"}
+              src={form.stamp ? (form.stamp.startsWith('http') ? form.stamp : `${API_BASE_URL}${form.stamp}`) : "/3342137.png"}
               alt="Tampon"
               className="object-contain w-full h-full drop-shadow-xl"
               style={{ filter: 'drop-shadow(0 4px 16px rgba(0,0,0,0.12))' }}
@@ -314,7 +315,7 @@ function MaCompagnie() {
             <>
               <button
                 type="button"
-                onClick={() => handleDownloadStamp(form.stamp.startsWith('http') ? form.stamp : `http://localhost:5000${form.stamp}`)}
+                onClick={() => handleDownloadStamp(form.stamp.startsWith('http') ? form.stamp : `${API_BASE_URL}${form.stamp}`)}
                 className="px-6 py-2 bg-green-600 text-white rounded-full shadow-lg hover:bg-green-700 text-sm font-semibold mb-2 transition-colors duration-200"
               >
                 Télécharger le tampon

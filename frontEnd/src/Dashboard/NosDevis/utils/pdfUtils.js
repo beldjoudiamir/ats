@@ -1,4 +1,6 @@
 import jsPDF from "jspdf";
+import "jspdf-autotable";
+import API_BASE_URL from "../../../config/api.js";
 
 // Fonction pour charger une image et la convertir en base64
 async function loadImageAsBase64(imageUrl) {
@@ -39,8 +41,8 @@ export async function generateDevisPDF(devis) {
   if (devis.companyInfo?.logo) {
     try {
       let logoUrl = devis.companyInfo.logo;
-      if (logoUrl.startsWith("/")) {
-        logoUrl = `http://localhost:5000${logoUrl}`;
+      if (logoUrl && !logoUrl.startsWith('http')) {
+        logoUrl = `${API_BASE_URL}${logoUrl}`;
       }
       const logoBase64 = await loadImageAsBase64(logoUrl);
       doc.addImage(logoBase64, "JPEG", 10, 10, 40, 20);

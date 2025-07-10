@@ -16,6 +16,7 @@ import {
   CreditCardIcon
 } from '@heroicons/react/24/outline';
 import axios from 'axios';
+import API_BASE_URL from '../config/api.js';
 
 const Devis = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -212,7 +213,7 @@ Cette demande a été envoyée depuis le formulaire de devis du site web.
       `.trim();
 
       // Envoyer à la messagerie
-      const response = await axios.post('http://localhost:5000/api/receivedMessage/add', {
+      const response = await axios.post(`${API_BASE_URL}/api/receivedMessage/add`, {
         name: formData.clientName || 'Demande de devis',
         email: formData.clientEmail || 'contact@ats-transport.com',
         phone: formData.clientPhone || '',

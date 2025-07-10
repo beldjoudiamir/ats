@@ -3,6 +3,7 @@ import Dashboard from "../mainDashboard.jsx";
 import axios from "axios";
 import Loader from "../../components/Loader";
 import { DocumentIcon, PlusIcon, PencilIcon, TrashIcon, EyeIcon } from "@heroicons/react/24/outline";
+import API_BASE_URL from "../../config/api.js";
 
 export default function ConditionsTransport() {
   const [conditions, setConditions] = useState([]);
@@ -52,21 +53,21 @@ export default function ConditionsTransport() {
   });
 
   useEffect(() => {
+    const fetchConditions = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${API_BASE_URL}/api/conditionsTransport`);
+        setConditions(response.data);
+      } catch (error) {
+        console.error("Erreur lors du chargement des conditions:", error);
+        setConditions([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchConditions();
   }, []);
-
-  const fetchConditions = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get("http://localhost:5000/api/conditionsTransport");
-      setConditions(response.data);
-    } catch (error) {
-      console.error("Erreur lors du chargement des conditions:", error);
-      setConditions([]);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleInputChange = (section, subsection, field, value) => {
     setFormData(prev => ({
@@ -85,9 +86,9 @@ export default function ConditionsTransport() {
     e.preventDefault();
     try {
       if (editingCondition) {
-        await axios.put(`http://localhost:5000/api/conditionsTransport/update/${editingCondition._id}`, formData);
+        await axios.put(`${API_BASE_URL}/api/conditionsTransport/update/${editingCondition._id}`, formData);
       } else {
-        await axios.post("http://localhost:5000/api/conditionsTransport/add", formData);
+        await axios.post(`${API_BASE_URL}/api/conditionsTransport/add`, formData);
       }
       setShowModal(false);
       setEditingCondition(null);
@@ -117,7 +118,7 @@ export default function ConditionsTransport() {
 
   const confirmDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/conditionsTransport/delete/${conditionToDelete._id}`);
+      await axios.delete(`${API_BASE_URL}/api/conditionsTransport/delete/${conditionToDelete._id}`);
       fetchConditions();
     } catch (error) {
       console.error("Erreur lors de la suppression:", error);

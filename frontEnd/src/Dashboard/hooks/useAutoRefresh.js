@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../../config/api.js';
 
 const useAutoRefresh = (endpoints, initialInterval = 30000) => {
   const [data, setData] = useState({});
@@ -21,7 +22,7 @@ const useAutoRefresh = (endpoints, initialInterval = 30000) => {
       setError(null);
       
       const promises = endpointsRef.current.map(endpoint => 
-        axios.get(`http://localhost:5000/api/${endpoint}`)
+        axios.get(`${API_BASE_URL}/api/${endpoint}`)
           .then(response => ({ [endpoint]: response.data }))
           .catch(err => ({ [endpoint]: [] }))
       );

@@ -1,5 +1,16 @@
 // utils/devisUtils.js
 import axios from "axios";
+import API_BASE_URL from "../../config/api.js";
+
+export const fetchEstimates = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/estimate`);
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des devis:", error);
+    throw error;
+  }
+};
 
 export const fetchAllDevisIDs = async () => {
   try {
@@ -63,14 +74,14 @@ export const calculateTotals = (items, tvaRate) => {
 };
 
 export const deleteEstimate = async (id) => {
-    try {
-      const response = await axios.delete(`http://localhost:5000/api/estimate/delete/${id}`);
-      return response; // ✅ on retourne bien la réponse ici
-    } catch (error) {
-      console.error("Erreur dans deleteEstimate :", error);
-      throw error; // ✅ on relance l'erreur pour qu'elle soit catchée côté composant
-    }
-  };
+  try {
+    const response = await axios.delete(`${API_BASE_URL}/api/estimate/delete/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la suppression du devis:", error);
+    throw error;
+  }
+};
 
 export const fetchAllFactureIDs = async () => {
   try {

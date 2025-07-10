@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { getCompanyInfo } from "../Dashboard/api/apiService";
 import { Bars3Icon, XMarkIcon, PhoneIcon } from "@heroicons/react/24/outline";
 import Loader from "../components/Loader";
+import axios from "axios";
+import API_BASE_URL from "../config/api.js";
 
 export default function Index() {
   const location = useLocation();
@@ -29,7 +31,7 @@ export default function Index() {
   let logoUrl = null;
   if (company && company.logo) {
     if (company.logo.startsWith("/")) {
-      logoUrl = `http://localhost:5000${encodeURI(company.logo)}`;
+      logoUrl = `${API_BASE_URL}${encodeURI(company.logo)}`;
     } else if (company.logo.startsWith("http")) {
       logoUrl = company.logo;
     }

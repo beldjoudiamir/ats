@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import API_BASE_URL from "../../config/api.js";
 
 const STATUSES = {
   PENDING:   { label: "En attente", description: "Le devis est en attente de validation ou d'approbation." },
@@ -321,9 +322,9 @@ function AddTransportOrder({ onClose, onOrderAdded, editOrder }) {
   useEffect(() => {
     console.log("editOrder reçu :", editOrder);
     setCompanyLoading(true);
-    axios.get("http://localhost:5000/api/companyClient").then(res => setTransporteurs(res.data || []));
-    axios.get("http://localhost:5000/api/listeCommissionnaire").then(res => setCommissionnaires(res.data || []));
-    axios.get("http://localhost:5000/api/transportOrder").then(res => {
+    axios.get(`${API_BASE_URL}/api/companyClient`).then(res => setTransporteurs(res.data || []));
+    axios.get(`${API_BASE_URL}/api/listeCommissionnaire`).then(res => setCommissionnaires(res.data || []));
+    axios.get(`${API_BASE_URL}/api/transportOrder`).then(res => {
       setOrders(res.data || []);
       if (!editOrder) {
         const num = generateOrderNumber(res.data || []);
@@ -331,8 +332,8 @@ function AddTransportOrder({ onClose, onOrderAdded, editOrder }) {
         setForm(prev => ({ ...prev, ordreTransport: num }));
       }
     });
-    axios.get("http://localhost:5000/api/estimate").then(res => setDevisList(res.data || []));
-    axios.get("http://localhost:5000/api/invoice").then(res => {
+    axios.get(`${API_BASE_URL}/api/estimate`).then(res => setDevisList(res.data || []));
+    axios.get(`${API_BASE_URL}/api/invoice`).then(res => {
       console.log("🔍 Factures récupérées:", res.data);
       console.log("🔍 Détail de la première facture:", res.data?.[0]);
       if (res.data && res.data.length > 0) {
@@ -343,7 +344,7 @@ function AddTransportOrder({ onClose, onOrderAdded, editOrder }) {
       }
       setFactureList(res.data || []);
     });
-    axios.get("http://localhost:5000/api/companyInfo")
+    axios.get(`${API_BASE_URL}/api/companyInfo`)
       .then(res => {
         // Adaptation pour gérer différents formats de réponse
         let data = res.data;
@@ -591,14 +592,14 @@ function AddTransportOrder({ onClose, onOrderAdded, editOrder }) {
       if (editOrder && editOrder._id) {
         console.log('PUT update - id:', editOrder._id);
         console.log('PUT update - dataToSend:', dataToSend);
-        const response = await axios.put(`http://localhost:5000/api/transportOrder/update/${editOrder._id}`, dataToSend);
+        const response = await axios.put(`${API_BASE_URL}/api/transportOrder/update/${editOrder._id}`, dataToSend);
         if (response.data && response.data.message) {
           setSuccess(response.data.message);
         } else {
           setSuccess("Mise à jour effectuée.");
         }
       } else {
-        const response = await axios.post("http://localhost:5000/api/transportOrder/add", dataToSend);
+        const response = await axios.post(`${API_BASE_URL}/api/transportOrder/add`, dataToSend);
         if (response.data && response.data.message) {
           setSuccess(response.data.message);
         } else {

@@ -1,5 +1,7 @@
 import jsPDF from "jspdf";
 import axios from "axios";
+import "jspdf-autotable";
+import API_BASE_URL from "../../../config/api.js";
 
 export async function generateTransportOrderPDF(order, companyInfo = {}) {
   try {
@@ -14,7 +16,7 @@ export async function generateTransportOrderPDF(order, companyInfo = {}) {
     let conditionsTransport = null;
     try {
       console.log("Récupération des conditions de transport...");
-      const conditionsResponse = await axios.get("http://localhost:5000/api/conditionsTransport");
+      const conditionsResponse = await axios.get(`${API_BASE_URL}/api/conditionsTransport`);
       console.log("Réponse API conditions:", conditionsResponse.data);
       if (conditionsResponse.data && conditionsResponse.data.length > 0) {
         conditionsTransport = conditionsResponse.data[0]; // Prendre la première condition

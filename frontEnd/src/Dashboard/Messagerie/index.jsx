@@ -1,6 +1,7 @@
 import Dashboard from "../mainDashboard.jsx";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import API_BASE_URL from "../../config/api.js";
 import ConfirmModal from "../Factures/ConfirmModal";
 import Loader from "../../components/Loader";
 
@@ -15,7 +16,7 @@ export default function Messagerie() {
   // Fonction pour charger les messages
   const fetchMessages = () => {
     setLoading(true);
-    axios.get("http://localhost:5000/api/receivedMessage").then((response) => {
+    axios.get(`${API_BASE_URL}/api/receivedMessage`).then((response) => {
       let allMessages = Array.isArray(response.data) ? response.data : [];
       
       // Séparer les messages normaux des demandes de devis
@@ -90,10 +91,10 @@ export default function Messagerie() {
     if (!confirm.id) return;
     try {
       if (confirm.type === "client") {
-        await axios.delete(`http://localhost:5000/api/receivedMessage/delete/${confirm.id}`);
+        await axios.delete(`${API_BASE_URL}/api/receivedMessage/delete/${confirm.id}`);
         setClientMessages(msgs => msgs.filter(m => m._id !== confirm.id));
       } else if (confirm.type === "devisRequest") {
-        await axios.delete(`http://localhost:5000/api/receivedMessage/delete/${confirm.id}`);
+        await axios.delete(`${API_BASE_URL}/api/receivedMessage/delete/${confirm.id}`);
         setDevisRequestMessages(msgs => msgs.filter(m => m._id !== confirm.id));
       }
     } catch (err) {

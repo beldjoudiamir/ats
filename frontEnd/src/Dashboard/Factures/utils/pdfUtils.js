@@ -1,4 +1,6 @@
 import jsPDF from "jspdf";
+import "jspdf-autotable";
+import API_BASE_URL from "../../../config/api.js";
 
 // Fonction pour charger une image et la convertir en base64
 async function loadImageAsBase64(imageUrl) {
@@ -35,14 +37,14 @@ export async function generateFacturePDF(facture) {
   // Récupération des conditions de transport pour les coordonnées bancaires
   let conditionsTransport = null;
   try {
-    const response = await fetch('http://localhost:5000/api/conditionsTransport');
+    const response = await fetch(`${API_BASE_URL}/api/conditionsTransport`);
     if (response.ok) {
       const data = await response.json();
       conditionsTransport = data[0]; // Prendre le premier enregistrement
       console.log("✅ Conditions de transport récupérées:", conditionsTransport);
     }
   } catch (error) {
-    console.log("❌ Erreur lors de la récupération des conditions de transport:", error);
+    console.error("Erreur lors de la récupération des conditions:", error);
   }
   console.log("🔍 Informations de l'entreprise:", facture.companyInfo);
   
@@ -55,8 +57,8 @@ export async function generateFacturePDF(facture) {
     try {
       // Construire l'URL complète du logo
       let logoUrl = facture.companyInfo.logo;
-      if (logoUrl.startsWith('/')) {
-        logoUrl = `http://localhost:5000${logoUrl}`;
+      if (logoUrl && !logoUrl.startsWith('http')) {
+        logoUrl = `${API_BASE_URL}${logoUrl}`;
       }
       
       console.log("🔍 URL du logo:", logoUrl);
@@ -149,8 +151,8 @@ export async function generateFacturePDF(facture) {
     if (partenaire.logo) {
       try {
         let partenaireLogoUrl = partenaire.logo;
-        if (partenaireLogoUrl.startsWith('/')) {
-          partenaireLogoUrl = `http://localhost:5000${partenaireLogoUrl}`;
+        if (partenaireLogoUrl && !partenaireLogoUrl.startsWith('http')) {
+          partenaireLogoUrl = `${API_BASE_URL}${partenaireLogoUrl}`;
         }
         const partenaireLogoBase64 = await loadImageAsBase64(partenaireLogoUrl);
         doc.addImage(partenaireLogoBase64, 'JPEG', 120, 10, 30, 15);
