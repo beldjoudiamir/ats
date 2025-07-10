@@ -1,13 +1,17 @@
 [build]
-  # Configuration pour le backend
-  command = "npm install"
-  publish = "backEnd"
-  base = "backEnd"
+  # Configuration pour le frontend
+  command = "npm run build"
+  publish = "frontEnd/dist"
+  base = "frontEnd"
 
 [build.environment]
   NODE_ENV = "production"
 
-# Redirections pour l'API
+# Configuration des fonctions serverless
+[functions]
+  directory = "netlify/functions"
+
+# Redirections pour l'API vers les fonctions
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
