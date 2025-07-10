@@ -1,0 +1,23 @@
+{
+  "name": "ats-transport-app",
+  "version": "1.0.0",
+  "description": "Application de gestion de transport ATS",
+  "main": "backEnd/src/server.js",
+  "scripts": {
+    "install-deps": "cd backEnd && npm install && cd ../frontEnd && npm install",
+    "build": "cd frontEnd && npm run build",
+    "start": "cd backEnd && npm start",
+    "dev": "concurrently \"cd backEnd && npm run dev\" \"cd frontEnd && npm run dev\"",
+    "postinstall": "npm run install-deps && npm run build"
+  },
+  "keywords": ["transport", "gestion", "ats"],
+  "author": "ATS Solutions",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+} 
