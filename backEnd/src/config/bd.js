@@ -1,10 +1,9 @@
 // Fichier config/bd.js
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { createMongoClient } = require("./mongodb-atlas");
 const dotenv = require("dotenv");
 
 dotenv.config();
 
-const uri = process.env.MONGODB_URI || "mongodb://localhost:27017";
 const DATABASE = "atsInfo";
 const COLLECTION = {
   collection: "information",
@@ -19,30 +18,17 @@ const COLLECTION = {
   users: "users",
 };
 
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-  ssl: true,
-  sslValidate: false,
-  tls: true,
-  tlsAllowInvalidCertificates: true,
-  tlsAllowInvalidHostnames: true,
-  retryWrites: true,
-  w: "majority",
-  maxPoolSize: 10,
-  serverSelectionTimeoutMS: 5000,
-  socketTimeoutMS: 45000,
-});
-
 async function connectToDatabase() {
+  let client;
+  
   try {
+    console.log("🔌 Attempting to connect to MongoDB Atlas...");
+    client = createMongoClient();
     await client.connect();
-    console.log("✅ Connected to MongoDB successfully!");
+    console.log("✅ Connected to MongoDB Atlas successfully!");
 
     const db = client.db(DATABASE);
+    console.log(`📊 Using database: ${DATABASE}`);
 
     return {
       collection: db.collection(COLLECTION.collection),
@@ -58,27 +44,25 @@ async function connectToDatabase() {
     };
   } catch (err) {
     console.error("❌ Error connecting to MongoDB:", err.message);
-    console.error("🔧 SSL/TLS Error - Trying alternative connection...");
+    console.error("🔧 Trying alternative connection method...");
     
-    // Tentative de connexion alternative
+    // Tentative avec une configuration encore plus basique
     try {
-      const alternativeClient = new MongoClient(uri, {
-        serverApi: {
-          version: ServerApiVersion.v1,
-          strict: false,
-          deprecationErrors: false,
-        },
-        ssl: false,
-        tls: false,
-        retryWrites: false,
+      const { MongoClient } = require("mongodb");
+      const simpleClient = new MongoClient(process.env.MONGODB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
         maxPoolSize: 1,
         serverSelectionTimeoutMS: 10000,
+        socketTimeoutMS: 30000,
+        ssl: false,
+        tls: false,
       });
       
-      await alternativeClient.connect();
-      console.log("✅ Connected to MongoDB with alternative config!");
+      await simpleClient.connect();
+      console.log("✅ Connected to MongoDB with simple config!");
       
-      const db = alternativeClient.db(DATABASE);
+      const db = simpleClient.db(DATABASE);
       
       return {
         collection: db.collection(COLLECTION.collection),
@@ -94,6 +78,7 @@ async function connectToDatabase() {
       };
     } catch (altErr) {
       console.error("❌ Alternative connection also failed:", altErr.message);
+      console.error("💡 Please check your MongoDB URI and network connection");
       throw altErr;
     }
   }
