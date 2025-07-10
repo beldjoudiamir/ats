@@ -103,11 +103,13 @@ async function startServer() {
       console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
     });
 
-    // Lancer HTTPS si les certificats sont disponibles
-    if (sslOptions) {
+    // Lancer HTTPS seulement si les certificats sont disponibles ET en production
+    if (sslOptions && process.env.NODE_ENV === 'production') {
       https.createServer(sslOptions, app).listen(HTTPS_PORT, () => {
         console.log(`🔐 HTTPS Server running on https://localhost:${HTTPS_PORT}`);
       });
+    } else if (sslOptions) {
+      console.log("⚠️ HTTPS désactivé en mode développement (certificats disponibles mais mode dev)");
     }
 
   } catch (err) {

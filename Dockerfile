@@ -18,8 +18,8 @@ COPY . .
 # Builder le frontend
 RUN cd frontEnd && npm run build
 
-# Exposer le port
-EXPOSE 3000
+# Exposer le port (Railway gère le port via $PORT)
+EXPOSE $PORT
 
 # Commande de démarrage
 CMD ["sh", "-c", "cd backEnd && npm start"] 

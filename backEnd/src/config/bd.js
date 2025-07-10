@@ -1,143 +1,52 @@
 // Fichier config/bd.js
 const { MongoClient } = require("mongodb");
-const { createLocalMongoClient } = require("./mongodb-local");
-const dotenv = require("dotenv");
+require('dotenv').config();
 
-dotenv.config();
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/ats";
 
-const DATABASE = "atsInfo";
-const COLLECTION = {
-  collection: "information",
-  collection2: "companyClient",
-  collection3: "transportOrder",
-  collection4: "conditionsTransport",
-  collection5: "estimate",
-  collection6: "invoice",
-  collection7: "transportQuoteRequest",
-  collection8: "receivedMessage",
-  collection9: "listeCommissionnaire",
-  users: "users",
-};
-
-// Configuration MongoDB simplifiée
-function createMongoClient() {
-  const uri = process.env.MONGODB_URI;
-  
-  // Configuration ultra-simple sans options dépréciées
-  const options = {
-    maxPoolSize: 10,
-    serverSelectionTimeoutMS: 30000,
-    socketTimeoutMS: 45000,
-    // Désactiver complètement SSL/TLS
-    ssl: false,
-    tls: false,
-    // Options de connexion basiques
-    retryWrites: false,
-    w: 1,
-  };
-  
-  return new MongoClient(uri, options);
-}
+console.log("🔌 Attempting to connect to MongoDB Atlas...");
 
 async function connectToDatabase() {
-  let client;
-  
-  // Afficher les informations de connexion pour MongoDB Atlas
-  console.log("🌐 Railway Environment Info:");
-  console.log("   - RAILWAY_STATIC_URL:", process.env.RAILWAY_STATIC_URL || "Not set");
-  console.log("   - RAILWAY_PUBLIC_DOMAIN:", process.env.RAILWAY_PUBLIC_DOMAIN || "Not set");
-  console.log("   - RAILWAY_REPLICA_ID:", process.env.RAILWAY_REPLICA_ID || "Not set");
-  console.log("   - RAILWAY_PROJECT_ID:", process.env.RAILWAY_PROJECT_ID || "Not set");
-  console.log("   - PORT:", process.env.PORT || "3000");
-  console.log("   - NODE_ENV:", process.env.NODE_ENV || "development");
-  
   try {
-    console.log("🔌 Attempting to connect to MongoDB Atlas...");
-    client = createMongoClient();
+    // Configuration simplifiée sans options dépréciées
+    const client = new MongoClient(MONGODB_URI, {
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    });
+
     await client.connect();
     console.log("✅ Connected to MongoDB Atlas successfully!");
 
-    const db = client.db(DATABASE);
-    console.log(`📊 Using database: ${DATABASE}`);
+    const db = client.db();
+    
+    // Collections
+    const collection = db.collection("myCompanyInfo");
+    const collection2 = db.collection("clients");
+    const collection3 = db.collection("transporteurs");
+    const collection4 = db.collection("commissionnaires");
+    const collection5 = db.collection("estimates");
+    const collection6 = db.collection("invoices");
+    const collection7 = db.collection("transportOrders");
+    const collection8 = db.collection("conditionsTransport");
+    const collection9 = db.collection("messages");
+    const users = db.collection("users");
 
     return {
-      collection: db.collection(COLLECTION.collection),
-      collection2: db.collection(COLLECTION.collection2),
-      collection3: db.collection(COLLECTION.collection3),
-      collection4: db.collection(COLLECTION.collection4),
-      collection5: db.collection(COLLECTION.collection5),
-      collection6: db.collection(COLLECTION.collection6),
-      collection7: db.collection(COLLECTION.collection7),
-      collection8: db.collection(COLLECTION.collection8),
-      collection9: db.collection(COLLECTION.collection9),
-      users: db.collection(COLLECTION.users),
+      collection,
+      collection2,
+      collection3,
+      collection4,
+      collection5,
+      collection6,
+      collection7,
+      collection8,
+      collection9,
+      users,
+      client
     };
-  } catch (err) {
-    console.error("❌ Error connecting to MongoDB Atlas:", err.message);
-    console.error("🔧 Trying alternative connection method...");
-    
-    // Tentative avec une configuration encore plus basique
-    try {
-      console.log("🔄 Trying alternative MongoDB connection...");
-      const alternativeClient = new MongoClient(process.env.MONGODB_URI, {
-        maxPoolSize: 1,
-        serverSelectionTimeoutMS: 10000,
-        socketTimeoutMS: 30000,
-        ssl: false,
-        tls: false,
-        retryWrites: false,
-        w: 1,
-      });
-      
-      await alternativeClient.connect();
-      console.log("✅ Connected to MongoDB with alternative config!");
-      
-      const db = alternativeClient.db(DATABASE);
-      
-      return {
-        collection: db.collection(COLLECTION.collection),
-        collection2: db.collection(COLLECTION.collection2),
-        collection3: db.collection(COLLECTION.collection3),
-        collection4: db.collection(COLLECTION.collection4),
-        collection5: db.collection(COLLECTION.collection5),
-        collection6: db.collection(COLLECTION.collection6),
-        collection7: db.collection(COLLECTION.collection7),
-        collection8: db.collection(COLLECTION.collection8),
-        collection9: db.collection(COLLECTION.collection9),
-        users: db.collection(COLLECTION.users),
-      };
-    } catch (altErr) {
-      console.error("❌ Alternative connection also failed:", altErr.message);
-      console.error("🔧 Trying local MongoDB as last resort...");
-      
-      // Dernière tentative avec MongoDB local
-      try {
-        console.log("🏠 Trying local MongoDB connection...");
-        const localClient = createLocalMongoClient();
-        await localClient.connect();
-        console.log("✅ Connected to local MongoDB!");
-        
-        const db = localClient.db(DATABASE);
-        
-        return {
-          collection: db.collection(COLLECTION.collection),
-          collection2: db.collection(COLLECTION.collection2),
-          collection3: db.collection(COLLECTION.collection3),
-          collection4: db.collection(COLLECTION.collection4),
-          collection5: db.collection(COLLECTION.collection5),
-          collection6: db.collection(COLLECTION.collection6),
-          collection7: db.collection(COLLECTION.collection7),
-          collection8: db.collection(COLLECTION.collection8),
-          collection9: db.collection(COLLECTION.collection9),
-          users: db.collection(COLLECTION.users),
-        };
-      } catch (localErr) {
-        console.error("❌ All connection attempts failed!");
-        console.error("💡 Please check your MongoDB URI and network connection");
-        console.error("🔧 Try adding 'Allow Access from Anywhere' in MongoDB Atlas Network Access");
-        throw localErr;
-      }
-    }
+  } catch (error) {
+    console.error("❌ Error connecting to MongoDB Atlas:", error.message);
+    throw error;
   }
 }
 

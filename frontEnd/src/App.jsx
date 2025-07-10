@@ -22,6 +22,7 @@ import ConditionsTransport from "./Dashboard/ConditionsTransport/index.jsx";
 import Footer from "./footer/index.jsx";
 import PrivateRoute from "./PrivateRoute";
 import NotFound from "./NotFound";
+import ApiTest from "./components/ApiTest";
 
 export default function App() {
   const location = useLocation();
@@ -76,6 +77,9 @@ export default function App() {
           <Route path="/utilisateurs" element={<Utilisateurs />} />
           <Route path="/dashboard/conditions-transport" element={<ConditionsTransport />} />
         </Route>
+
+        {/* Route de test temporaire pour diagnostiquer l'API */}
+        <Route path="/api-test" element={<ApiTest />} />
 
         {/* Page 404 */}
         <Route path="/404" element={<NotFound />} />
