@@ -27,7 +27,7 @@ Ajouter dans Railway :
 | Variable | Valeur |
 |----------|--------|
 | `MONGODB_URI` | `mongodb+srv://ATS8SOLUTIONS:Jg3nbtEUc4vfHwlP@cluster0.bhv3c.mongodb.net/?retryWrites=true&w=majority` |
-| `JWT_SECRET` | `ats8solutions-jwt-secret-2024-super-securise` |
+| `JWT_SECRET` | `214fb1a94856e046bc8e1a14735213425790d3f6d5f2e80bf8b50dbbb1098f9025feb395773fa2d0f7c0b45037311200effec3c3d52a` |
 | `PORT` | `3000` |
 
 ### 5. Déploiement
