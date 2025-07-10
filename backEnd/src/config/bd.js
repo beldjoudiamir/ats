@@ -1,6 +1,6 @@
 // Fichier config/bd.js
-const { createMongoClient } = require("./mongodb-atlas");
-const { getPublicIP } = require("./get-ip");
+const { MongoClient } = require("mongodb");
+const { createLocalMongoClient } = require("./mongodb-local");
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -19,6 +19,32 @@ const COLLECTION = {
   users: "users",
 };
 
+// Configuration MongoDB sans SSL/TLS
+function createMongoClient() {
+  const uri = process.env.MONGODB_URI;
+  
+  // Configuration ultra-simple sans SSL
+  const options = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    maxPoolSize: 1,
+    serverSelectionTimeoutMS: 30000,
+    socketTimeoutMS: 45000,
+    // Désactiver complètement SSL/TLS
+    ssl: false,
+    tls: false,
+    tlsAllowInvalidCertificates: false,
+    tlsAllowInvalidHostnames: false,
+    // Options de connexion basiques
+    retryWrites: false,
+    w: 1,
+    bufferMaxEntries: 0,
+    bufferCommands: false,
+  };
+  
+  return new MongoClient(uri, options);
+}
+
 async function connectToDatabase() {
   let client;
   
@@ -30,18 +56,6 @@ async function connectToDatabase() {
   console.log("   - RAILWAY_PROJECT_ID:", process.env.RAILWAY_PROJECT_ID || "Not set");
   console.log("   - PORT:", process.env.PORT || "3000");
   console.log("   - NODE_ENV:", process.env.NODE_ENV || "development");
-  
-  // Récupérer l'IP publique pour MongoDB Atlas
-  console.log("🔍 Trying to get public IP address...");
-  try {
-    const publicIP = await getPublicIP();
-    console.log("✅ SUCCESS - Public IP Address:", publicIP);
-    console.log("📝 ADD THIS TO MONGODB ATLAS NETWORK ACCESS:", publicIP + "/32");
-    console.log("🔗 Go to MongoDB Atlas → Network Access → ADD IP ADDRESS →", publicIP + "/32");
-  } catch (error) {
-    console.log("❌ Could not get public IP:", error.message);
-    console.log("💡 Alternative: Use 'Allow Access from Anywhere' (0.0.0.0/0) temporarily");
-  }
   
   try {
     console.log("🔌 Attempting to connect to MongoDB Atlas...");
@@ -65,13 +79,13 @@ async function connectToDatabase() {
       users: db.collection(COLLECTION.users),
     };
   } catch (err) {
-    console.error("❌ Error connecting to MongoDB:", err.message);
+    console.error("❌ Error connecting to MongoDB Atlas:", err.message);
     console.error("🔧 Trying alternative connection method...");
     
     // Tentative avec une configuration encore plus basique
     try {
-      const { MongoClient } = require("mongodb");
-      const simpleClient = new MongoClient(process.env.MONGODB_URI, {
+      console.log("🔄 Trying alternative MongoDB connection...");
+      const alternativeClient = new MongoClient(process.env.MONGODB_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         maxPoolSize: 1,
@@ -79,12 +93,14 @@ async function connectToDatabase() {
         socketTimeoutMS: 30000,
         ssl: false,
         tls: false,
+        retryWrites: false,
+        w: 1,
       });
       
-      await simpleClient.connect();
-      console.log("✅ Connected to MongoDB with simple config!");
+      await alternativeClient.connect();
+      console.log("✅ Connected to MongoDB with alternative config!");
       
-      const db = simpleClient.db(DATABASE);
+      const db = alternativeClient.db(DATABASE);
       
       return {
         collection: db.collection(COLLECTION.collection),
@@ -100,8 +116,35 @@ async function connectToDatabase() {
       };
     } catch (altErr) {
       console.error("❌ Alternative connection also failed:", altErr.message);
-      console.error("💡 Please check your MongoDB URI and network connection");
-      throw altErr;
+      console.error("🔧 Trying local MongoDB as last resort...");
+      
+      // Dernière tentative avec MongoDB local
+      try {
+        console.log("🏠 Trying local MongoDB connection...");
+        const localClient = createLocalMongoClient();
+        await localClient.connect();
+        console.log("✅ Connected to local MongoDB!");
+        
+        const db = localClient.db(DATABASE);
+        
+        return {
+          collection: db.collection(COLLECTION.collection),
+          collection2: db.collection(COLLECTION.collection2),
+          collection3: db.collection(COLLECTION.collection3),
+          collection4: db.collection(COLLECTION.collection4),
+          collection5: db.collection(COLLECTION.collection5),
+          collection6: db.collection(COLLECTION.collection6),
+          collection7: db.collection(COLLECTION.collection7),
+          collection8: db.collection(COLLECTION.collection8),
+          collection9: db.collection(COLLECTION.collection9),
+          users: db.collection(COLLECTION.users),
+        };
+      } catch (localErr) {
+        console.error("❌ All connection attempts failed!");
+        console.error("💡 Please check your MongoDB URI and network connection");
+        console.error("🔧 Try adding 'Allow Access from Anywhere' in MongoDB Atlas Network Access");
+        throw localErr;
+      }
     }
   }
 }
