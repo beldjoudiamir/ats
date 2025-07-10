@@ -1,236 +1,411 @@
-# 🚀 Guide de Déploiement - ATS sur Hostinger
+# Guide de Déploiement - ATS Application
 
-## 📋 Prérequis
+## 🚀 Options de Déploiement
 
-- Compte Hostinger avec hébergement web
-- Base de données MongoDB (MongoDB Atlas recommandé)
-- Domaine configuré
+### 1. Déploiement Local (Développement)
 
-## 🏗️ Architecture de Déploiement
+#### Prérequis
+- Node.js 18+
+- MongoDB installé localement
+- Yarn ou npm
 
-### Option 1 : Hébergement Partagé (Recommandé pour débuter)
-- **Frontend :** Hébergement web Hostinger
-- **Backend :** VPS Hostinger ou service externe (Railway, Render, etc.)
-- **Base de données :** MongoDB Atlas
-
-### Option 2 : VPS Hostinger (Recommandé pour production)
-- **Frontend + Backend :** VPS Hostinger
-- **Base de données :** MongoDB Atlas ou MongoDB local
-
-## 📁 Structure des Fichiers
-
-```
-public_html/                    # Dossier racine Hostinger
-├── index.html                  # Build React
-├── assets/                     # Assets React
-├── .htaccess                   # Configuration Apache
-└── uploads/                    # Dossier uploads (optionnel)
-
-backend/                        # Dossier backend (VPS)
-├── src/
-├── package.json
-├── .env                        # Variables d'environnement
-└── uploads/                    # Dossier uploads
-```
-
-## 🔧 Configuration Frontend
-
-### 1. Modifier l'URL de l'API
-Dans `frontEnd/src/Dashboard/api/apiService.js`, changer l'URL de base :
-
-```javascript
-// Développement
-const API_BASE_URL = 'http://localhost:5000/api';
-
-// Production
-const API_BASE_URL = 'https://votre-backend.com/api';
-```
-
-### 2. Build de Production
+#### Étapes
 ```bash
+# 1. Cloner le repository
+git clone <votre-repo-url>
+cd ats-finiched-avec-option
+
+# 2. Configuration Backend
+cd backEnd
+yarn install
+cp env.example .env
+# Éditer .env avec vos configurations
+
+# 3. Configuration Frontend
+cd ../frontEnd
+yarn install
+
+# 4. Démarrer MongoDB
+mongod
+
+# 5. Démarrer Backend (nouveau terminal)
+cd backEnd
+yarn dev
+
+# 6. Démarrer Frontend (nouveau terminal)
 cd frontEnd
-yarn build
+yarn start
 ```
 
-### 3. Upload sur Hostinger
-- Connectez-vous à votre panneau Hostinger
-- Allez dans "Gestionnaire de fichiers"
-- Naviguez vers `public_html`
-- Uploadez le contenu du dossier `frontEnd/dist/`
+### 2. Déploiement sur Serveur VPS
 
-## 🔧 Configuration Backend
+#### Prérequis Serveur
+- Ubuntu 20.04+ ou CentOS 8+
+- Node.js 18+
+- MongoDB
+- Nginx
+- PM2 (gestionnaire de processus)
 
-### Option A : VPS Hostinger
+#### Installation sur Serveur
 
-1. **Connectez-vous à votre VPS via SSH**
 ```bash
-ssh root@votre-ip-vps
-```
+# 1. Mettre à jour le système
+sudo apt update && sudo apt upgrade -y
 
-2. **Installer Node.js**
-```bash
+# 2. Installer Node.js
 curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 sudo apt-get install -y nodejs
+
+# 3. Installer MongoDB
+wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+sudo apt update
+sudo apt install -y mongodb-org
+sudo systemctl start mongod
+sudo systemctl enable mongod
+
+# 4. Installer Nginx
+sudo apt install nginx -y
+sudo systemctl start nginx
+sudo systemctl enable nginx
+
+# 5. Installer PM2
+sudo npm install -g pm2
 ```
 
-3. **Cloner le projet**
-```bash
-git clone https://github.com/votre-username/ats.git
-cd ats/backEnd
-```
+#### Configuration de l'Application
 
-4. **Installer les dépendances**
 ```bash
+# 1. Cloner le projet
+git clone <votre-repo-url>
+cd ats-finiched-avec-option
+
+# 2. Configuration Backend
+cd backEnd
 npm install
-```
-
-5. **Configurer les variables d'environnement**
-```bash
 cp env.example .env
-nano .env
+# Éditer .env pour la production
 ```
 
-**Contenu du fichier .env :**
+Configuration `.env` pour la production :
 ```env
 PORT=3000
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/atsInfo
-JWT_SECRET=votre_secret_jwt_super_securise
-EMAIL_USER=votre_email@gmail.com
-EMAIL_PASS=votre_mot_de_passe_app
+MONGODB_URI=mongodb://localhost:27017/ats-production
+JWT_SECRET=votre-secret-jwt-tres-securise
 NODE_ENV=production
+EMAIL_USER=votre-email@gmail.com
+EMAIL_PASS=votre-mot-de-passe-app
 ```
 
-6. **Créer les administrateurs**
 ```bash
-npm run create-admins
+# 3. Configuration Frontend
+cd ../frontEnd
+npm install
+# Créer .env pour la production
 ```
 
-7. **Démarrer avec PM2**
+Configuration `.env` frontend pour la production :
+```env
+VITE_API_URL=https://votre-domaine.com/api
+VITE_APP_NAME=ATS Application
+```
+
+#### Build et Démarrage
+
 ```bash
-npm install -g pm2
+# 1. Build Frontend
+cd frontEnd
+npm run build
+
+# 2. Démarrer Backend avec PM2
+cd ../backEnd
 pm2 start src/server.js --name "ats-backend"
-pm2 startup
+
+# 3. Sauvegarder la configuration PM2
 pm2 save
+pm2 startup
 ```
 
-### Option B : Service Externe (Railway/Render)
+#### Configuration Nginx
 
-1. **Railway**
-- Connectez votre repo GitHub
-- Configurez les variables d'environnement
-- Déployez automatiquement
+Créer le fichier `/etc/nginx/sites-available/ats-app` :
 
-2. **Render**
-- Connectez votre repo GitHub
-- Configurez le service web
-- Ajoutez les variables d'environnement
+```nginx
+server {
+    listen 80;
+    server_name votre-domaine.com www.votre-domaine.com;
 
-## 🔗 Configuration CORS
+    # Redirection vers HTTPS
+    return 301 https://$server_name$request_uri;
+}
 
-Dans `backEnd/src/utils/middleware.js`, configurez CORS :
+server {
+    listen 443 ssl http2;
+    server_name votre-domaine.com www.votre-domaine.com;
 
-```javascript
-app.use(cors({
-  origin: ['https://votre-domaine.com', 'http://localhost:5173'],
-  credentials: true
-}));
+    # Certificats SSL (Let's Encrypt)
+    ssl_certificate /etc/letsencrypt/live/votre-domaine.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/votre-domaine.com/privkey.pem;
+
+    # Configuration SSL
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-RSA-AES256-GCM-SHA512:DHE-RSA-AES256-GCM-SHA512:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers off;
+
+    # API Backend
+    location /api {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # Frontend React
+    location / {
+        root /var/www/ats-app/frontEnd/dist;
+        try_files $uri $uri/ /index.html;
+        
+        # Cache des assets statiques
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+            expires 1y;
+            add_header Cache-Control "public, immutable";
+        }
+    }
+
+    # Sécurité
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "no-referrer-when-downgrade" always;
+    add_header Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'" always;
+}
 ```
 
-## 🗄️ Configuration MongoDB Atlas
+```bash
+# Activer le site
+sudo ln -s /etc/nginx/sites-available/ats-app /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
 
-1. **Créer un cluster MongoDB Atlas**
-2. **Configurer l'accès réseau** (0.0.0.0/0 pour tous)
-3. **Créer un utilisateur de base de données**
-4. **Obtenir l'URI de connexion**
+### 3. Déploiement avec Docker
+
+#### Dockerfile Backend
+
+Créer `backEnd/Dockerfile` :
+```dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --only=production
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
+```
+
+#### Dockerfile Frontend
+
+Créer `frontEnd/Dockerfile` :
+```dockerfile
+FROM node:18-alpine as build
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+#### Docker Compose
+
+Créer `docker-compose.yml` à la racine :
+```yaml
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: ats-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+
+  backend:
+    build: ./backEnd
+    container_name: ats-backend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://admin:password@mongodb:27017/ats?authSource=admin
+      - JWT_SECRET=votre-secret-jwt
+      - PORT=3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+
+  frontend:
+    build: ./frontEnd
+    container_name: ats-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  mongodb_data:
+```
+
+#### Déploiement Docker
+
+```bash
+# Build et démarrer les conteneurs
+docker-compose up -d
+
+# Vérifier les logs
+docker-compose logs -f
+
+# Arrêter les conteneurs
+docker-compose down
+```
+
+### 4. Déploiement Cloud (AWS, Google Cloud, Azure)
+
+#### AWS EC2 + RDS
+
+1. **Créer une instance EC2**
+2. **Créer une base de données RDS MongoDB**
+3. **Configurer les groupes de sécurité**
+4. **Déployer l'application**
+
+#### Google Cloud Run
+
+```bash
+# Build et push des images
+gcloud builds submit --tag gcr.io/votre-projet/ats-backend ./backEnd
+gcloud builds submit --tag gcr.io/votre-projet/ats-frontend ./frontEnd
+
+# Déployer sur Cloud Run
+gcloud run deploy ats-backend --image gcr.io/votre-projet/ats-backend --platform managed
+gcloud run deploy ats-frontend --image gcr.io/votre-projet/ats-frontend --platform managed
+```
 
 ## 🔒 Sécurité
 
-### Variables d'environnement sensibles
-- `JWT_SECRET` : Secret fort et unique
-- `MONGODB_URI` : URI MongoDB avec credentials
-- `EMAIL_PASS` : Mot de passe d'application Gmail
+### Certificats SSL
+```bash
+# Installation Let's Encrypt
+sudo apt install certbot python3-certbot-nginx -y
 
-### Headers de sécurité
-Le fichier `.htaccess` inclut déjà :
-- Protection XSS
-- Protection clickjacking
-- Compression Gzip
-- Cache des assets
+# Obtenir un certificat
+sudo certbot --nginx -d votre-domaine.com -d www.votre-domaine.com
 
-## 📧 Configuration Email
-
-### Gmail SMTP
-```env
-EMAIL_USER=votre_email@gmail.com
-EMAIL_PASS=mot_de_passe_application
+# Renouvellement automatique
+sudo crontab -e
+# Ajouter : 0 12 * * * /usr/bin/certbot renew --quiet
 ```
 
-**Note :** Utilisez un mot de passe d'application Gmail, pas votre mot de passe principal.
+### Variables d'environnement sécurisées
+- Utiliser des secrets managers (AWS Secrets Manager, Google Secret Manager)
+- Ne jamais commiter les fichiers `.env` dans Git
+- Utiliser des mots de passe forts pour JWT_SECRET
 
-## 🚀 Déploiement Final
-
-### 1. Testez en local
+### Firewall
 ```bash
-# Backend
-cd backEnd && npm start
-
-# Frontend
-cd frontEnd && yarn preview
+# Configuration UFW
+sudo ufw allow ssh
+sudo ufw allow 80
+sudo ufw allow 443
+sudo ufw enable
 ```
 
-### 2. Déployez le backend
-- VPS : Suivez les étapes VPS ci-dessus
-- Service externe : Connectez votre repo
+## 📊 Monitoring
 
-### 3. Déployez le frontend
-- Uploadez le contenu de `frontEnd/dist/` sur Hostinger
-
-### 4. Testez en production
-- Vérifiez que l'API répond
-- Testez la connexion utilisateur
-- Vérifiez les uploads de fichiers
-
-## 🔍 Monitoring
-
-### PM2 (VPS)
+### PM2 Monitoring
 ```bash
-pm2 status
-pm2 logs ats-backend
+# Dashboard PM2
 pm2 monit
-```
 
-### Logs
-```bash
-# Logs d'erreur
-pm2 logs ats-backend --err
-
-# Logs d'accès
-pm2 logs ats-backend --out
-```
-
-## 🛠️ Maintenance
-
-### Mise à jour
-```bash
-# Pull des changements
-git pull origin main
+# Logs
+pm2 logs ats-backend
 
 # Redémarrage
 pm2 restart ats-backend
 ```
 
-### Sauvegarde
-- Base de données MongoDB Atlas (automatique)
-- Fichiers uploads (sauvegarde manuelle recommandée)
+### Nginx Monitoring
+```bash
+# Vérifier les logs
+sudo tail -f /var/log/nginx/access.log
+sudo tail -f /var/log/nginx/error.log
+
+# Statistiques
+sudo nginx -V
+```
+
+## 🔄 Mise à Jour
+
+### Script de déploiement automatique
+Créer `deploy.sh` :
+```bash
+#!/bin/bash
+
+echo "🚀 Déploiement ATS Application..."
+
+# Pull des dernières modifications
+git pull origin main
+
+# Mise à jour Backend
+cd backEnd
+npm install
+pm2 restart ats-backend
+
+# Mise à jour Frontend
+cd ../frontEnd
+npm install
+npm run build
+
+echo "✅ Déploiement terminé!"
+```
+
+```bash
+# Rendre le script exécutable
+chmod +x deploy.sh
+
+# Exécuter le déploiement
+./deploy.sh
+```
 
 ## 📞 Support
 
-En cas de problème :
-1. Vérifiez les logs PM2
-2. Testez l'API avec Postman
-3. Vérifiez les variables d'environnement
-4. Consultez la documentation Hostinger
-
----
-
-**Note :** Ce guide est optimisé pour Hostinger mais peut être adapté pour d'autres hébergeurs. 
+Pour toute question sur le déploiement, consultez :
+- [Documentation PM2](https://pm2.keymetrics.io/)
+- [Documentation Nginx](https://nginx.org/en/docs/)
+- [Documentation Docker](https://docs.docker.com/)
+- [Documentation AWS](https://aws.amazon.com/documentation/) 

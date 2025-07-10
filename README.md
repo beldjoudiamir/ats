@@ -2,99 +2,95 @@
 
 ## 📋 Description
 
-ATS est une application web complète de gestion de transport et de services, développée avec React pour le frontend et Node.js/Express pour le backend. L'application permet la gestion des clients, transporteurs, devis, factures, et offre un système de messagerie intégré.
+Application complète de gestion de transport et services avec interface web moderne et API backend robuste.
 
-## 🚀 Fonctionnalités
+## 🏗️ Architecture
 
-### Frontend (React + Vite)
-- **Dashboard interactif** avec graphiques D3.js
-- **Gestion des clients** et transporteurs
-- **Système de devis** et facturation
-- **Messagerie intégrée**
-- **Interface responsive** avec Tailwind CSS
-- **Génération de PDF** pour devis et factures
+```
+ats-finiched-avec-option/
+├── backEnd/          # API Node.js/Express
+├── frontEnd/         # Application React/Vite
+└── README.md         # Ce fichier
+```
 
-### Backend (Node.js + Express)
-- **API RESTful** complète
-- **Authentification JWT**
-- **Gestion des fichiers** (upload d'images)
-- **Envoi d'emails** avec Nodemailer
-- **Base de données MongoDB**
-- **Certificats SSL** auto-signés
-
-## 🛠️ Technologies Utilisées
-
-### Frontend
-- React 19
-- Vite
-- Tailwind CSS
-- D3.js (graphiques)
-- React Router DOM
-- Axios
-- jsPDF
+## 🚀 Technologies Utilisées
 
 ### Backend
-- Node.js
-- Express.js
-- MongoDB
-- JWT (JSON Web Tokens)
-- Multer (gestion fichiers)
-- Nodemailer
-- bcrypt (hachage)
+- **Node.js** avec Express
+- **MongoDB** pour la base de données
+- **JWT** pour l'authentification
+- **Multer** pour la gestion des fichiers
+- **Nodemailer** pour l'envoi d'emails
+- **bcrypt** pour le chiffrement des mots de passe
+
+### Frontend
+- **React 19** avec Vite
+- **Tailwind CSS** pour le styling
+- **React Router** pour la navigation
+- **Axios** pour les requêtes API
+- **D3.js** pour les graphiques
+- **jsPDF** pour la génération de PDF
 
 ## 📁 Structure du Projet
 
+### Backend (`/backEnd`)
 ```
-ats-finished-avec-option/
-├── frontEnd/                 # Application React
-│   ├── src/
-│   │   ├── Dashboard/        # Composants du tableau de bord
-│   │   ├── components/       # Composants réutilisables
-│   │   └── ...
-│   ├── public/              # Assets statiques
-│   └── package.json
-├── backEnd/                 # API Node.js
-│   ├── src/
-│   │   ├── controllers/     # Contrôleurs API
-│   │   ├── routes/          # Routes Express
-│   │   ├── config/          # Configuration DB
-│   │   └── utils/           # Utilitaires
-│   ├── uploads/             # Fichiers uploadés
-│   └── package.json
-└── README.md
+backEnd/
+├── src/
+│   ├── config/           # Configuration base de données
+│   ├── controllers/      # Contrôleurs métier
+│   ├── routes/           # Définition des routes API
+│   ├── utils/            # Utilitaires et middleware
+│   └── server.js         # Point d'entrée serveur
+├── certs/                # Certificats SSL
+├── Json/                 # Données JSON de test
+├── uploads/              # Fichiers uploadés
+└── package.json
 ```
 
-## 🚀 Installation et Démarrage
+### Frontend (`/frontEnd`)
+```
+frontEnd/
+├── src/
+│   ├── Dashboard/        # Interface principale
+│   │   ├── Clients/      # Gestion des clients
+│   │   ├── Factures/     # Gestion des factures
+│   │   ├── NosDevis/     # Gestion des devis
+│   │   ├── Transport/    # Gestion des transports
+│   │   └── ...
+│   ├── components/       # Composants réutilisables
+│   └── ...
+├── public/               # Assets statiques
+└── package.json
+```
+
+## 🛠️ Installation et Démarrage
 
 ### Prérequis
 - Node.js (version 18 ou supérieure)
-- MongoDB
-- npm ou yarn
+- MongoDB installé et en cours d'exécution
+- Yarn ou npm
 
 ### Installation
 
 1. **Cloner le repository**
 ```bash
 git clone <votre-repo-url>
-cd ats-finished-avec-option
+cd ats-finiched-avec-option
 ```
 
-2. **Installer les dépendances Backend**
+2. **Configuration Backend**
 ```bash
 cd backEnd
-npm install
-```
-
-3. **Configurer l'environnement Backend**
-```bash
+yarn install
 cp env.example .env
 # Éditer .env avec vos configurations
 ```
 
-4. **Installer les dépendances Frontend**
+3. **Configuration Frontend**
 ```bash
 cd ../frontEnd
-npm install
+yarn install
 ```
 
 ### Démarrage
@@ -102,181 +98,53 @@ npm install
 1. **Démarrer le Backend**
 ```bash
 cd backEnd
-npm run dev
+yarn dev
 ```
 
 2. **Démarrer le Frontend**
 ```bash
 cd frontEnd
-npm start
+yarn start
 ```
 
-3. **Accéder à l'application**
-- Frontend: http://localhost:5173
-- Backend: http://localhost:3000
+Le backend sera accessible sur `http://localhost:3000` (ou le port configuré)
+Le frontend sera accessible sur `http://localhost:5173`
 
 ## 🔧 Configuration
 
-### Variables d'environnement Backend (.env)
+### Variables d'environnement Backend
+Créer un fichier `.env` dans le dossier `backEnd/` :
+
 ```env
 PORT=3000
-MONGODB_URI=mongodb://localhost:27017/ats
-JWT_SECRET=votre_secret_jwt
-EMAIL_USER=votre_email@gmail.com
-EMAIL_PASS=votre_mot_de_passe_app
+MONGODB_URI=mongodb://localhost:27017/ats-database
+JWT_SECRET=votre-secret-jwt
+EMAIL_USER=votre-email@gmail.com
+EMAIL_PASS=votre-mot-de-passe-app
 ```
 
-## 📚 Documentation API
+## 📊 Fonctionnalités
 
-L'API backend expose les endpoints suivants :
-
-- `POST /api/auth/login` - Authentification
-- `GET /api/clients` - Liste des clients
-- `POST /api/clients` - Créer un client
-- `GET /api/transporteurs` - Liste des transporteurs
-- `POST /api/devis` - Créer un devis
-- `GET /api/factures` - Liste des factures
+- **Gestion des Clients** : Ajout, modification, recherche de clients
+- **Gestion des Devis** : Création, modification, génération PDF
+- **Gestion des Factures** : Création, suivi, génération PDF
+- **Gestion des Transports** : Commandes de transport, suivi
+- **Messagerie** : Communication interne
+- **Tableaux de bord** : Graphiques et statistiques
+- **Gestion des utilisateurs** : Authentification et autorisation
 
 ## 🤝 Contribution
 
 1. Fork le projet
-2. Créer une branche feature (`git checkout -b feature/AmazingFeature`)
-3. Commit les changements (`git commit -m 'Add some AmazingFeature'`)
+2. Créer une branche pour votre fonctionnalité (`git checkout -b feature/AmazingFeature`)
+3. Commit vos changements (`git commit -m 'Add some AmazingFeature'`)
 4. Push vers la branche (`git push origin feature/AmazingFeature`)
 5. Ouvrir une Pull Request
 
-## 📄 Licence
+## 📝 Licence
 
 Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 
-## 👥 Auteurs
+## 📞 Support
 
-- Votre nom - Développeur principal
-
-## 🙏 Remerciements
-
-- React et la communauté React
-- Tailwind CSS pour le styling
-- D3.js pour les graphiques
-- MongoDB pour la base de données
-
----
-
-**Note**: Ce projet est en développement actif. Les fonctionnalités peuvent évoluer.
-
-## 🔑 **Étape 1 : Se connecter en tant qu'admin existant**
-
-Si vous n'avez pas encore d'admin, créons d'abord un admin de base :
-
-**POST** `http://localhost:5000/api/users/register`
-
-**Body (JSON) :**
-```json
-{
-  "name": "Admin Initial",
-  "email": "admin@ats.com",
-  "password": "admin123"
-}
-```
-
-## 🔑 **Étape 2 : Se connecter pour obtenir le token**
-
-**POST** `http://localhost:5000/api/users/login`
-
-**Body (JSON) :**
-```json
-{
-  "email": "admin@ats.com",
-  "password": "admin123"
-}
-```
-
-**Réponse attendue :**
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "user": {
-    "id": "...",
-    "name": "Admin Initial",
-    "email": "admin@ats.com",
-    "role": "user"
-  }
-}
-```
-
-## 🔑 **Étape 3 : Ajouter LE PADRE avec le token**
-
-**POST** `http://localhost:5000/api/users/add`
-
-**Headers :**
-```
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-Content-Type: application/json
-```
-
-**Body (JSON) :**
-```json
-{
-  "name": "LE PADRE",
-  "mail": "le@padre.io",
-  "password": "Xman2025!",
-  "role": "admin"
-}
-```
-
-## 📝 **Configuration Postman étape par étape :**
-
-### 1. **Créer la requête de connexion :**
-- Méthode : `POST`
-- URL : `http://localhost:5000/api/users/login`
-- Headers : `Content-Type: application/json`
-- Body (raw JSON) :
-```json
-{
-  "email": "admin@ats.com",
-  "password": "admin123"
-}
-```
-
-### 2. **Créer la requête d'ajout d'admin :**
-- Méthode : `POST`
-- URL : `http://localhost:5000/api/users/add`
-- Headers :
-  - `Content-Type: application/json`
-  - `Authorization: Bearer {{token}}`
-- Body (raw JSON) :
-```json
-{
-  "name": "LE PADRE",
-  "mail": "le@padre.io",
-  "password": "Xman2025!",
-  "role": "admin"
-}
-```
-
-### 3. **Configurer une variable Postman :**
-- Dans la requête de login, allez dans l'onglet "Tests"
-- Ajoutez ce script pour sauvegarder automatiquement le token :
-```javascript
-if (pm.response.code === 200) {
-    const response = pm.response.json();
-    pm.environment.set("token", response.token);
-}
-```
-
-## 🚀 **Alternative : Utiliser l'inscription directe**
-
-Si vous voulez éviter l'étape de connexion, vous pouvez aussi utiliser l'endpoint d'inscription publique, mais le rôle sera forcé à "user" :
-
-**POST** `http://localhost:5000/api/users/register`
-
-**Body (JSON) :**
-```json
-{
-  "name": "LE PADRE",
-  "email": "le@padre.io",
-  "password": "Xman2025!"
-}
-```
-
-**Quelle méthode préférez-vous utiliser ?**
+Pour toute question ou problème, veuillez ouvrir une issue sur le repository GitHub. 
