@@ -1,13 +1,11 @@
 {
   "name": "backEnd",
   "version": "1.0.0",
-  "main": "./vercel.js",
+  "main": "./src/server.js",
   "license": "MIT",
   "scripts": {
-    "start": "node vercel.js",
-    "dev": "nodemon src/server.js",
-    "build": "npm install",
-    "vercel-build": "npm install"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -19,8 +17,7 @@
     "mongodb": "^6.14.2",
     "multer": "^2.0.1",
     "nodemailer": "^7.0.4",
-    "selfsigned": "^2.4.1",
-    "serverless-http": "^3.2.0"
+    "selfsigned": "^2.4.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
